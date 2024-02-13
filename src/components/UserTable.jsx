@@ -9,14 +9,14 @@ const UserTable = () => {
 
   const addUserClickHandler = () => {
     setAddUserClicked(!addUserClicked);
-    console.log(addUserClicked);
+    // console.log(addUserClicked);
   };
 
   const editUserClickHandler = (id) => {
     userData.forEach((user) => {
       if (user.id === id) {
         setEditClicked(!editClicked);
-        console.log(id);
+        // console.log(id);
       }
     });
   };

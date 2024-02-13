@@ -4,21 +4,19 @@ import userData from "./../userData.js";
 import UserForm from "./UserForm.jsx";
 
 const UserTable = () => {
-  const [editClicked, setEditClicked] = useState(false);
+  // const [editClicked, setEditClicked] = useState(false);
   const [addUserClicked, setAddUserClicked] = useState(false);
+  const [editUser, setEditUser] = useState(null);
 
   const addUserClickHandler = () => {
     setAddUserClicked(!addUserClicked);
+    setEditUser(null);
     // console.log(addUserClicked);
   };
 
-  const editUserClickHandler = (id) => {
-    userData.forEach((user) => {
-      if (user.id === id) {
-        setEditClicked(!editClicked);
-        // console.log(id);
-      }
-    });
+  const editUserClickHandler = (user) => {
+    setAddUserClicked(!addUserClicked);
+    setEditUser(user);
   };
 
   return (
@@ -29,7 +27,7 @@ const UserTable = () => {
         </Button>
       )}
       {addUserClicked ? (
-        <UserForm cancelEdit={addUserClickHandler} />
+        <UserForm addHandler={addUserClickHandler} user={editUser} />
       ) : (
         <div className="relative shadow-md rounded-lg font-Poppins">
           <table className="w-full text-left">
@@ -53,7 +51,7 @@ const UserTable = () => {
                     <td className="px-6 py-4 flex items-center justify-center">
                       <Button
                         bgColor="bg-blue-700"
-                        clickHandler={() => editUserClickHandler(Element.id)}
+                        clickHandler={() => editUserClickHandler(Element)}
                       >
                         Edit
                       </Button>

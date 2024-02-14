@@ -1,10 +1,10 @@
-import UserTable from "./components/UserTable.jsx";
+import HomePage from "./components/HomePage";
 import "./App.css";
 
 function App() {
   return (
     <>
-      <UserTable />
+      <HomePage />
     </>
   );
 }

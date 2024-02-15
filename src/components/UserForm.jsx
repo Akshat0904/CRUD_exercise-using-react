@@ -1,19 +1,18 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import userData from "../userData";
 import Button from "../UI/Button";
 
-const UserForm = ({ addHandler, user }) => {
-  const [data, setData] = useState({
-    name: user ? user.name : "",
-    email: user ? user.email : "",
-    number: user ? user.number : "",
+const UserForm = ({ addUser, editUser, userList, changeUserList }) => {
+  const [user, setUser] = useState({
+    name: editUser ? editUser.name : "",
+    email: editUser ? editUser.email : "",
+    number: editUser ? editUser.number : "",
   });
 
   //Validation States
-  const [nameError, setNameError] = useState(false);
-  const [emailError, setEmailError] = useState(false);
-  const [numberError, setNumberError] = useState(false);
+  const [nameValidation, setNameValidation] = useState(false);
+  const [emailValidation, setEmailValidation] = useState(false);
+  const [numberValidation, setNumberValidation] = useState(false);
 
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
@@ -25,54 +24,43 @@ const UserForm = ({ addHandler, user }) => {
     return userData.findIndex((obj) => obj.id === id);
   };
 
-  console.log(data);
-  console.log(user);
-
   const handleChange = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
+    setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  const validateData = (data) => {
-    if (data.name === "") {
-      setNameError(true);
-      console.log("Please provide a name");
-      return false;
+  const validateUser = (user) => {
+    if (user.name === "") {
+      setNameValidation(true);
+      return;
     } else {
-      setNameError(false);
+      setNameValidation(false);
     }
 
-    if (!isValidEmail(data.email)) {
-      setEmailError(true);
-      console.log("Please provide a valid email");
-      return false;
+    if (!isValidEmail(user.email)) {
+      setEmailValidation(true);
+      return;
     } else {
-      setEmailError(false);
+      setEmailValidation(false);
     }
 
-    if (data.number.length !== 10) {
-      setNumberError(true);
-      console.log("Please provide a number and it must be 10 character long");
-      return false;
+    if (user.number.length !== 10) {
+      setNumberValidation(true);
+      return;
     } else {
-      setNumberError(false);
+      setNumberValidation(false);
     }
 
-    if (user) {
-      const index = findIndexById(user.id, userData);
-      data.id = index + 1;
-      userData[index] = data;
+    if (editUser) {
+      const index = findIndexById(editUser.id, userList);
+      user.id = index + 1;
+      userList[index] = user;
     } else {
-      data.id = userData.length + 1;
-      userData.push(data);
+      user.id = userList.length + 1;
+      console.log(userList);
+      userList.push(user);
     }
-
-    console.log(userData);
-    addHandler();
-
-    console.log(data);
-
-    console.log("Data is valid");
-    return true;
+    changeUserList(userList);
+    addUser();
   };
 
   return (
@@ -86,11 +74,11 @@ const UserForm = ({ addHandler, user }) => {
           type="text"
           id="Name"
           className="border-1 rounded-sm"
-          value={data.name}
+          value={user.name}
           name="name"
           onChange={handleChange}
         />
-        {nameError && (
+        {nameValidation && (
           <span className="text-red-500">Please provide a name</span>
         )}
         <label htmlFor="Email" className="font-semibold">
@@ -100,11 +88,11 @@ const UserForm = ({ addHandler, user }) => {
           type="text"
           id="Email"
           className="border-1 rounded-sm"
-          value={data.email}
+          value={user.email}
           name="email"
           onChange={handleChange}
         />
-        {emailError && (
+        {emailValidation && (
           <span className="text-red-500">Please provide a valid email</span>
         )}
         <label htmlFor="contactNum" className="font-semibold">
@@ -114,20 +102,20 @@ const UserForm = ({ addHandler, user }) => {
           type="number"
           id="contactNum"
           className="border-1 rounded-sm"
-          value={data.number}
+          value={user.number}
           name="number"
           onChange={handleChange}
         />
-        {numberError && (
+        {numberValidation && (
           <span className="text-red-500">
             Please provide a number and it must be 10 character long
           </span>
         )}
         <div className="mx-auto">
-          <Button bgColor="bg-blue-700" clickHandler={() => validateData(data)}>
+          <Button bgColor="bg-blue-700" clickHandler={() => validateUser(user)}>
             Save
           </Button>
-          <Button bgColor="bg-red-500" clickHandler={addHandler}>
+          <Button bgColor="bg-red-500" clickHandler={() => addUser()}>
             Cancel
           </Button>
         </div>

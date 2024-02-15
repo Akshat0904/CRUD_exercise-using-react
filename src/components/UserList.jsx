@@ -47,27 +47,28 @@ const UserList = () => {
         </Button>
       )}
 
-      {addUserClicked ? (
+      {(addUserClicked && (
         <UserForm
           addUser={addUser}
           editUser={editUser}
           userList={userDetail}
           changeUserList={changeUserDetail}
         />
-      ) : deleteUser ? (
-        <DeleteUser
-          deleteUser={deleteUser}
-          userDelete={changeDeleteState}
-          userList={userDetail}
-          changeUserList={changeUserDetail}
-        />
-      ) : (
-        <UserTable
-          editFunction={editUserHandler}
-          deleteFunction={deleteUserHandler}
-          users={userDetail}
-        />
-      )}
+      )) ||
+        (deleteUser && (
+          <DeleteUser
+            deleteUser={deleteUser}
+            userDelete={changeDeleteState}
+            userList={userDetail}
+            changeUserList={changeUserDetail}
+          />
+        )) || (
+          <UserTable
+            editFunction={editUserHandler}
+            deleteFunction={deleteUserHandler}
+            users={userDetail}
+          />
+        )}
     </div>
   );
 };

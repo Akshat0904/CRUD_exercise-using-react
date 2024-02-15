@@ -56,7 +56,7 @@ const UserForm = ({ addUser, editUser, userList, changeUserList }) => {
       userList[index] = user;
     } else {
       user.id = userList.length + 1;
-      console.log(userList);
+      // console.log(userList);
       userList.push(user);
     }
     changeUserList(userList);

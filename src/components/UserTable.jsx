@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import Button from "../UI/Button";
 
-const UserTable = ({ editFunction, deleteFunction, users }) => {
+const UserTable = ({ editFunction, deleteFunction, userList }) => {
   return (
     <div className="relative shadow-md rounded-lg font-Poppins">
       <table className="w-full text-left">
@@ -15,7 +15,7 @@ const UserTable = ({ editFunction, deleteFunction, users }) => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => {
+          {userList.map((user) => {
             return (
               <tr key={user.id} className="bg-white border-b">
                 <td className="px-6 py-4">{user.id}</td>

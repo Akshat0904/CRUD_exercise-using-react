@@ -66,7 +66,7 @@ const UserList = () => {
           <UserTable
             editFunction={editUserHandler}
             deleteFunction={deleteUserHandler}
-            users={userDetail}
+            userList={userDetail}
           />
         )}
     </div>

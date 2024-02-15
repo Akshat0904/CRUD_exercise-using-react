@@ -2,14 +2,17 @@
 import Button from "../UI/Button";
 
 const DeleteUser = ({ deleteUser, userDelete, userList, changeUserList }) => {
+  // Delete user function
   const removeUser = (deleteUser) => {
-    const index = userList.findIndex((obj) => obj.id === deleteUser.id);
-    userList.splice(index, 1);
-    const length = userList.length;
-    for (let i = 0; i < length; i++) {
-      userList[i].id = i + 1;
-    }
-    changeUserList(userList);
+    const updatedList = userList.filter((obj) => obj.id !== deleteUser.id);
+    console.log(updatedList);
+    const length = updatedList.length;
+    let count = length - 1;
+    updatedList.forEach((user) => {
+      user.id = length - count;
+      count--;
+    });
+    changeUserList(updatedList);
     userDelete();
   };
 

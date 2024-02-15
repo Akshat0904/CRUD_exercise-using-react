@@ -15,23 +15,23 @@ const UserTable = ({ editFunction, deleteFunction, users }) => {
           </tr>
         </thead>
         <tbody>
-          {users.map((Element) => {
+          {users.map((user) => {
             return (
-              <tr key={Element.id} className="bg-white border-b">
-                <td className="px-6 py-4">{Element.id}</td>
-                <td className="px-6 py-4">{Element.name}</td>
-                <td className="px-6 py-4">{Element.email}</td>
-                <td className="px-6 py-4">{Element.number}</td>
+              <tr key={user.id} className="bg-white border-b">
+                <td className="px-6 py-4">{user.id}</td>
+                <td className="px-6 py-4">{user.name}</td>
+                <td className="px-6 py-4">{user.email}</td>
+                <td className="px-6 py-4">{user.number}</td>
                 <td className="px-6 py-4 flex items-center justify-center">
                   <Button
                     bgColor="bg-blue-700"
-                    clickHandler={() => editFunction(Element)}
+                    clickHandler={() => editFunction(user)}
                   >
                     Edit
                   </Button>
                   <Button
                     bgColor="bg-red-500"
-                    clickHandler={() => deleteFunction(Element)}
+                    clickHandler={() => deleteFunction(user)}
                   >
                     Delete
                   </Button>

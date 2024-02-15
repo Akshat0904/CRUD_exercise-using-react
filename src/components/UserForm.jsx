@@ -5,12 +5,14 @@ import Button from "../UI/Button";
 const UserForm = ({ addUser, editUser, userList, changeUserList }) => {
   const [user, setUser] = useState({
     name: editUser ? editUser.name : "",
+    age: editUser ? editUser.age : "",
     email: editUser ? editUser.email : "",
     number: editUser ? editUser.number : "",
   });
 
   //Validation States
   const [nameValidation, setNameValidation] = useState(false);
+  const [ageValidation, setAgeValidation] = useState(false);
   const [emailValidation, setEmailValidation] = useState(false);
   const [numberValidation, setNumberValidation] = useState(false);
 
@@ -34,6 +36,13 @@ const UserForm = ({ addUser, editUser, userList, changeUserList }) => {
       return;
     } else {
       setNameValidation(false);
+    }
+
+    if (user.age >= 18 && user.age <= 100) {
+      setAgeValidation(false);
+    } else {
+      setAgeValidation(true);
+      return;
     }
 
     if (!isValidEmail(user.email)) {
@@ -80,6 +89,22 @@ const UserForm = ({ addUser, editUser, userList, changeUserList }) => {
         />
         {nameValidation && (
           <span className="text-red-500">Please provide a name</span>
+        )}
+        <label htmlFor="age" className="font-semibold">
+          Age
+        </label>
+        <input
+          type="number"
+          id="age"
+          className="border-1 rounded-sm"
+          value={user.age}
+          name="age"
+          onChange={handleChange}
+        />
+        {ageValidation && (
+          <span className="text-red-500">
+            Age must be greater than or equal to 18
+          </span>
         )}
         <label htmlFor="Email" className="font-semibold">
           Email

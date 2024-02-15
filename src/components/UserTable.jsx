@@ -9,6 +9,7 @@ const UserTable = ({ editFunction, deleteFunction, userList }) => {
           <tr>
             <th className="px-6 py-3">Sr No.</th>
             <th className="px-6 py-3">Name</th>
+            <th className="px-6 py-3">Age</th>
             <th className="px-6 py-3">Email</th>
             <th className="px-6 py-3">Number</th>
             <th className="px-6 py-3 text-center">Actions</th>
@@ -20,6 +21,7 @@ const UserTable = ({ editFunction, deleteFunction, userList }) => {
               <tr key={user.id} className="bg-white border-b">
                 <td className="px-6 py-4">{user.id}</td>
                 <td className="px-6 py-4">{user.name}</td>
+                <td className="px-6 py-4">{user.age}</td>
                 <td className="px-6 py-4">{user.email}</td>
                 <td className="px-6 py-4">{user.number}</td>
                 <td className="px-6 py-4 flex items-center justify-center">

@@ -31,7 +31,7 @@ const UserForm = ({ addUser, editUser, userList, changeUserList }) => {
   };
 
   const validateUser = (user) => {
-    if (user.name === "") {
+    if (user.name.trim() === "") {
       setNameValidation(true);
       return;
     } else {

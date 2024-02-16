@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import Button from "../UI/Button";
+import Button from "../../shared/UI/Button";
 
 const UserForm = ({ addUser, editUser, userList, changeUserList }) => {
   const [user, setUser] = useState({

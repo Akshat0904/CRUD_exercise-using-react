@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import Button from "../UI/Button";
+import Button from "../../shared/UI/Button";
 
 const UserTable = ({ editFunction, deleteFunction, userList }) => {
   return (

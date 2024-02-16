@@ -1,9 +1,9 @@
 import { useState } from "react";
-import Button from "../UI/Button.jsx";
+import Button from "../../shared/UI/Button.jsx";
 import UserForm from "./UserForm.jsx";
 import DeleteUser from "./DeleteUser.jsx";
 import UserTable from "./UserTable.jsx";
-import userData from "../userData.js";
+import userData from "../../userData.js";
 
 const UserList = () => {
   //Functionality states

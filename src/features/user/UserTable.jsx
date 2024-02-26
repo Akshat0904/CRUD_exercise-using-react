@@ -3,9 +3,9 @@ import Button from "../../shared/UI/Button";
 
 const UserTable = ({ editFunction, deleteFunction, userList }) => {
   return (
-    <div className="relative shadow-md rounded-lg font-Poppins">
-      <table className="w-full text-left">
-        <thead className="text-base text-gray-700 uppercase bg-gray-100">
+    <div className="fixed w-full top-20 mx-auto font-Poppins -z-10 ">
+      <table className="relative w-[80%] text-left rounded-lg shadow-lg ">
+        <thead className="text-base text-gray-700 uppercase bg-gray-200">
           <tr>
             <th className="px-6 py-3">Sr No.</th>
             <th className="px-6 py-3">Name</th>
@@ -18,7 +18,7 @@ const UserTable = ({ editFunction, deleteFunction, userList }) => {
         <tbody>
           {userList.map((user) => {
             return (
-              <tr key={user.id} className="bg-white border-b">
+              <tr key={user.id} className="bg-white border-b ">
                 <td className="px-6 py-4">{user.id}</td>
                 <td className="px-6 py-4">{user.name}</td>
                 <td className="px-6 py-4">{user.age}</td>

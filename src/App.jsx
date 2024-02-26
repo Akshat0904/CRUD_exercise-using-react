@@ -1,10 +1,10 @@
-import UserList from "./features/user/UserList";
+import User from "./features/user/User";
 import "./App.css";
 
 function App() {
   return (
     <>
-      <UserList />
+      <User />
     </>
   );
 }

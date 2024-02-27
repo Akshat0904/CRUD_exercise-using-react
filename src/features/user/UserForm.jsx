@@ -3,19 +3,19 @@ import { useState } from "react";
 import Button from "../../shared/UI/Button";
 
 const UserForm = ({
-  addUser,
-  editUser,
-  validateData,
+  onCancel,
+  editedUser,
+  validateAndSaveData,
   isNameValid,
   isAgeValid,
   isEmailValid,
   isNumberValid,
 }) => {
   const [user, setUser] = useState({
-    name: editUser ? editUser.name : "",
-    age: editUser ? editUser.age : "",
-    email: editUser ? editUser.email : "",
-    number: editUser ? editUser.number : "",
+    name: editedUser ? editedUser.name : "",
+    age: editedUser ? editedUser.age : "",
+    email: editedUser ? editedUser.email : "",
+    number: editedUser ? editedUser.number : "",
   });
 
   const handleChange = (e) => {
@@ -39,7 +39,7 @@ const UserForm = ({
             name="name"
             onChange={handleChange}
           />
-          {isNameValid && (
+          {!isNameValid && (
             <span className="text-red-500">Please provide a name</span>
           )}
           <label htmlFor="age" className="font-semibold">
@@ -53,7 +53,7 @@ const UserForm = ({
             name="age"
             onChange={handleChange}
           />
-          {isAgeValid && (
+          {!isAgeValid && (
             <span className="text-red-500">
               Age must be greater than or equal to 18
             </span>
@@ -69,9 +69,14 @@ const UserForm = ({
             name="email"
             onChange={handleChange}
           />
-          {isEmailValid && (
+          {(!isEmailValid.validEmail && (
             <span className="text-red-500">Please provide a valid email</span>
-          )}
+          )) ||
+            (!isEmailValid.isEmailExist && (
+              <span className="text-red-500">
+                This email is already exist, try another one
+              </span>
+            ))}
           <label htmlFor="contactNum" className="font-semibold">
             Number (10 characters)
           </label>
@@ -83,19 +88,24 @@ const UserForm = ({
             name="number"
             onChange={handleChange}
           />
-          {isNumberValid && (
+          {(!isNumberValid.validNumber && (
             <span className="text-red-500">
               Please provide a number and it must be 10 character long
             </span>
-          )}
+          )) ||
+            (!isNumberValid.isNumberExist && (
+              <span className="text-red-500">
+                Number is already exist, try another one
+              </span>
+            ))}
           <div className="mx-auto">
             <Button
               bgColor="bg-blue-700"
-              clickHandler={() => validateData(user)}
+              clickHandler={() => validateAndSaveData(user)}
             >
               Save
             </Button>
-            <Button bgColor="bg-red-500" clickHandler={() => addUser()}>
+            <Button bgColor="bg-red-500" clickHandler={() => onCancel()}>
               Cancel
             </Button>
           </div>

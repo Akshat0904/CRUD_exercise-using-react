@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Button from "../../shared/UI/Button";
 import UserForm from "./UserForm";
-import DeleteUser from "./DeleteUser";
+import UserDelete from "./UserDelete";
 import UserTable from "./UserTable";
 import userData from "../../userData";
 
@@ -13,15 +13,27 @@ const User = () => {
   const [editedUser, setEditedUser] = useState(null);
   const [deletedUser, setDeletedUser] = useState(null);
 
+  //Validation States
+  const [isNameValid, setIsNameValid] = useState(true);
+  const [isAgeValid, setIsAgeValid] = useState(true);
+  const [isEmailValid, setIsEmailValid] = useState({
+    validEmail: true,
+    isEmailExist: true,
+  });
+  const [isNumberValid, setIsNumberValid] = useState({
+    validNumber: true,
+    isNumberExist: true,
+  });
+
   //Handlers
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
   const changeUserDetail = (userList) => {
     setUserDetail(userList);
   };
 
-  const addUser = () => {
+  const onShowUserFormToggle = () => {
     setIsAddUserBtnClicked(!isAddUserBtnClicked);
-    setEditedUser(null);
-    setDeletedUser(null);
+    clearValidation();
   };
 
   const editUser = (user) => {
@@ -34,18 +46,22 @@ const User = () => {
     setIsDeleteBtnClicked(!isDeleteBtnClicked);
   };
 
-  const changeDeleteState = () => {
+  const deleteSelectedUser = (user) => {
+    const updatedUserList = userDetail.filter((obj) => obj.id !== user.id);
+    const updatedListLength = updatedUserList.length;
+    let count = updatedListLength - 1;
+    updatedUserList.forEach((user) => {
+      user.id = updatedListLength - count;
+      count--;
+    });
+    changeUserDetail(updatedUserList);
+    onShowDeleteUserToggle();
+  };
+
+  const onShowDeleteUserToggle = () => {
     setDeletedUser(null);
     setIsDeleteBtnClicked(!isDeleteBtnClicked);
   };
-
-  //Validation States
-  const [isNameValid, setIsNameValid] = useState(false);
-  const [isAgeValid, setIsAgeValid] = useState(false);
-  const [isEmailValid, setIsEmailValid] = useState(false);
-  const [isNumberValid, setIsNumberValid] = useState(false);
-
-  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
   const isValidEmail = (email) => {
     return emailRegex.test(email);
@@ -57,39 +73,69 @@ const User = () => {
 
   const validateUser = (user) => {
     if (user.name.trim() === "") {
-      setIsNameValid(true);
+      setIsNameValid(false);
       return;
     } else {
-      setIsNameValid(false);
+      setIsNameValid(true);
     }
 
     if (user.age >= 18 && user.age <= 100) {
-      setIsAgeValid(false);
-    } else {
       setIsAgeValid(true);
+    } else {
+      setIsAgeValid(false);
       return;
     }
-    console.log(isEmailExist(user));
-    if (!isValidEmail(user.email)) {
-      setIsEmailValid(true);
-      return;
-    } else {
-      setIsEmailValid(false);
+
+    if (!editedUser || user.email !== editedUser.email) {
+      if (!isValidEmail(user.email)) {
+        setIsEmailValid({
+          ...isEmailValid,
+          validEmail: false,
+          isEmailExist: true,
+        });
+        return;
+      } else if (!isEmailExist(user)) {
+        setIsEmailValid({
+          ...isEmailValid,
+          isEmailExist: false,
+          validEmail: true,
+        });
+        return;
+      } else {
+        setIsEmailValid({
+          ...isEmailValid,
+          isEmailExist: true,
+          validEmail: true,
+        });
+      }
     }
 
-    console.log(isNumberExist(user));
-
-    if (user.number.length !== 10) {
-      setIsNumberValid(true);
-      return;
-    } else {
-      setIsNumberValid(false);
+    if (!editedUser || user.number !== editedUser.number) {
+      if (user.number.length !== 10) {
+        setIsNumberValid({
+          ...isNumberValid,
+          validNumber: false,
+          isNumberExist: true,
+        });
+        return;
+      } else if (!isNumberExist(user)) {
+        setIsNumberValid({
+          ...isNumberValid,
+          isNumberExist: false,
+          validNumber: true,
+        });
+        return;
+      } else {
+        setIsNumberValid({
+          ...isNumberValid,
+          validNumber: true,
+          isNumberExist: true,
+        });
+      }
     }
 
     const changeArray = [...userDetail];
     console.log(changeArray);
-    // user.id = changeArray.length + 1;
-    // changeArray.push(user);
 
     if (editedUser) {
       const index = findIndexById(editedUser.id, changeArray);
@@ -102,20 +148,45 @@ const User = () => {
       changeArray.push(user);
     }
     setUserDetail(changeArray);
-    addUser(user);
+    onShowUserFormToggle();
   };
 
   const isEmailExist = (user) => {
-    return userDetail.includes(user.email);
+    const i = userDetail.some((e) => e.email === user.email);
+    if (i) {
+      return false;
+    } else {
+      return true;
+    }
   };
 
   const isNumberExist = (user) => {
-    return userDetail.includes(user.number);
+    const i = userDetail.some((e) => e.number === user.number);
+    if (i) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const clearValidation = () => {
+    setEditedUser(null);
+    setDeletedUser(null);
+    setIsNameValid(true);
+    setIsAgeValid(true);
+    setIsEmailValid({
+      validEmail: true,
+      isEmailExist: true,
+    });
+    setIsNumberValid({
+      validNumber: true,
+      isNumberExist: true,
+    });
   };
 
   return (
     <>
-      <Button bgColor="bg-blue-700" clickHandler={addUser}>
+      <Button bgColor="bg-blue-700" clickHandler={onShowUserFormToggle}>
         Add User
       </Button>
       <UserTable
@@ -125,9 +196,9 @@ const User = () => {
       />
       {isAddUserBtnClicked && (
         <UserForm
-          addUser={addUser}
-          editUser={editedUser}
-          validateData={validateUser}
+          onCancel={onShowUserFormToggle}
+          editedUser={editedUser}
+          validateAndSaveData={validateUser}
           isNameValid={isNameValid}
           isAgeValid={isAgeValid}
           isEmailValid={isEmailValid}
@@ -135,11 +206,10 @@ const User = () => {
         />
       )}
       {isDeleteBtnClicked && (
-        <DeleteUser
-          deleteUser={deletedUser}
-          userDelete={changeDeleteState}
-          userList={userDetail}
-          changeUserList={changeUserDetail}
+        <UserDelete
+          user={deletedUser}
+          deleteUser={deleteSelectedUser}
+          onCancel={onShowDeleteUserToggle}
         />
       )}
     </>

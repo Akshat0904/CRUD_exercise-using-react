@@ -47,6 +47,11 @@ const User = () => {
     setIsDeleteBtnClicked(!isDeleteBtnClicked);
   };
 
+  const onShowUserDeleteToggle = () => {
+    setDeletedUser(null);
+    setIsDeleteBtnClicked(!isDeleteBtnClicked);
+  };
+
   const deleteSelectedUser = (user) => {
     const updatedUserList = userDetail.filter((obj) => obj.id !== user.id);
     const updatedListLength = updatedUserList.length;
@@ -56,12 +61,7 @@ const User = () => {
       count--;
     });
     changeUserDetail(updatedUserList);
-    onShowDeleteUserToggle();
-  };
-
-  const onShowDeleteUserToggle = () => {
-    setDeletedUser(null);
-    setIsDeleteBtnClicked(!isDeleteBtnClicked);
+    onShowUserDeleteToggle();
   };
 
   const isValidEmail = (email) => {
@@ -206,7 +206,7 @@ const User = () => {
         <UserDelete
           user={deletedUser}
           deleteUser={deleteSelectedUser}
-          onCancel={onShowDeleteUserToggle}
+          onCancel={onShowUserDeleteToggle}
         />
       )}
     </>

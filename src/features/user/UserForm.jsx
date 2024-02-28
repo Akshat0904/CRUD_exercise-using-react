@@ -78,7 +78,7 @@ const UserForm = ({
               </span>
             ))}
           <label htmlFor="contactNum" className="font-semibold">
-            Number (10 characters)
+            Number (10 Digits)
           </label>
           <input
             type="number"

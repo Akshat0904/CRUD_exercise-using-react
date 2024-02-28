@@ -27,6 +27,7 @@ const User = () => {
 
   //Handlers
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
   const changeUserDetail = (userList) => {
     setUserDetail(userList);
   };
@@ -94,7 +95,7 @@ const User = () => {
           isEmailExist: true,
         });
         return;
-      } else if (!isEmailExist(user)) {
+      } else if (isEmailExist(user)) {
         setIsEmailValid({
           ...isEmailValid,
           isEmailExist: false,
@@ -118,7 +119,7 @@ const User = () => {
           isNumberExist: true,
         });
         return;
-      } else if (!isNumberExist(user)) {
+      } else if (isNumberExist(user)) {
         setIsNumberValid({
           ...isNumberValid,
           isNumberExist: false,
@@ -144,7 +145,7 @@ const User = () => {
     } else {
       user.id = changeArray.length + 1;
       console.log(changeArray);
-      // console.log(userList);ho
+      // console.log(userList);
       changeArray.push(user);
     }
     setUserDetail(changeArray);
@@ -152,21 +153,17 @@ const User = () => {
   };
 
   const isEmailExist = (user) => {
-    const i = userDetail.some((e) => e.email === user.email);
-    if (i) {
-      return false;
-    } else {
+    if (userDetail.some((e) => e.email === user.email)) {
       return true;
     }
+    return;
   };
 
   const isNumberExist = (user) => {
-    const i = userDetail.some((e) => e.number === user.number);
-    if (i) {
-      return false;
-    } else {
+    if (userDetail.some((e) => e.number === user.number)) {
       return true;
     }
+    return;
   };
 
   const clearValidation = () => {

@@ -4,21 +4,81 @@ import Button from "../../shared/UI/Button";
 
 const UserForm = ({
   onCancel,
-  editedUser,
-  validateAndSaveData,
-  isNameValid,
-  isAgeValid,
-  isEmailValid,
-  isNumberValid,
+  selectedUser,
+  saveUser,
+  isEmailExist,
+  isNumberExist,
 }) => {
   const [user, setUser] = useState({
-    name: editedUser ? editedUser.name : "",
-    age: editedUser ? editedUser.age : "",
-    email: editedUser ? editedUser.email : "",
-    number: editedUser ? editedUser.number : "",
+    name: selectedUser ? selectedUser.name : "",
+    age: selectedUser ? selectedUser.age : "",
+    email: selectedUser ? selectedUser.email : "",
+    number: selectedUser ? selectedUser.number : "",
   });
 
-  const handleChange = (e) => {
+  const [formErr, setFormErr] = useState({});
+
+  //Validation States
+  // const [isNameValid, setIsNameValid] = useState(true);
+  // const [isAgeValid, setIsAgeValid] = useState(true);
+  // const [isEmailValid, setIsEmailValid] = useState({
+  //   validEmail: true,
+  //   isEmailExist: true,
+  // });
+  // const [isNumberValid, setIsNumberValid] = useState({
+  //   validNumber: true,
+  //   isNumberExist: true,
+  // });
+
+  //Handlers
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+  const isValidEmail = (email) => {
+    return emailRegex.test(email);
+  };
+
+  const validateUser = (user) => {
+    let error = {};
+
+    if (user.name.trim() === "") {
+      error.name = "name should not be blank";
+    }
+
+    if (user.age < 18 || user.age > 100) {
+      error.age = "Age must be greater than 18";
+    }
+
+    if (!selectedUser || user.email !== selectedUser.email) {
+      if (!isValidEmail(user.email)) {
+        error.email = "email is not valid";
+      } else if (isEmailExist(user)) {
+        error.email = "email is already exist, try another one";
+      }
+    }
+
+    if (!selectedUser || user.number !== selectedUser.number) {
+      if (user.number.length !== 10) {
+        error.number = "number must have 10 digits";
+      } else if (isNumberExist(user)) {
+        error.number = "number is already exist, try another one";
+      }
+    }
+
+    return error;
+  };
+
+  const checkValidation = (user) => {
+    const errorObj = validateUser(user);
+
+    if (Object.keys(errorObj).length != 0) {
+      setFormErr(errorObj);
+      return;
+    }
+
+    saveUser(user);
+  };
+
+  const onChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
@@ -37,11 +97,9 @@ const UserForm = ({
             className="border-gray-300 border-2 rounded-sm"
             value={user.name}
             name="name"
-            onChange={handleChange}
+            onChange={onChange}
           />
-          {!isNameValid && (
-            <span className="text-red-500">Please provide a name</span>
-          )}
+          {formErr.name && <span className="text-red-500">{formErr.name}</span>}
           <label htmlFor="age" className="font-semibold">
             Age
           </label>
@@ -51,13 +109,9 @@ const UserForm = ({
             className="border-gray-300 border-2 rounded-sm"
             value={user.age}
             name="age"
-            onChange={handleChange}
+            onChange={onChange}
           />
-          {!isAgeValid && (
-            <span className="text-red-500">
-              Age must be greater than or equal to 18
-            </span>
-          )}
+          {formErr.age && <span className="text-red-500">{formErr.age}</span>}
           <label htmlFor="Email" className="font-semibold">
             Email
           </label>
@@ -67,16 +121,11 @@ const UserForm = ({
             className="border-gray-300 border-2 rounded-sm"
             value={user.email}
             name="email"
-            onChange={handleChange}
+            onChange={onChange}
           />
-          {(!isEmailValid.validEmail && (
-            <span className="text-red-500">Please provide a valid email</span>
-          )) ||
-            (!isEmailValid.isEmailExist && (
-              <span className="text-red-500">
-                This email is already exist, try another one
-              </span>
-            ))}
+          {formErr.email && (
+            <span className="text-red-500">{formErr.email}</span>
+          )}
           <label htmlFor="contactNum" className="font-semibold">
             Number (10 Digits)
           </label>
@@ -86,26 +135,16 @@ const UserForm = ({
             className="border-gray-300 border-2 rounded-sm"
             value={user.number}
             name="number"
-            onChange={handleChange}
+            onChange={onChange}
           />
-          {(!isNumberValid.validNumber && (
-            <span className="text-red-500">
-              Please provide a number and it must be 10 character long
-            </span>
-          )) ||
-            (!isNumberValid.isNumberExist && (
-              <span className="text-red-500">
-                Number is already exist, try another one
-              </span>
-            ))}
+          {formErr.number && (
+            <span className="text-red-500">{formErr.number}</span>
+          )}
           <div className="mx-auto">
-            <Button
-              bgColor="bg-blue-700"
-              clickHandler={() => validateAndSaveData(user)}
-            >
+            <Button bgColor="bg-blue-700" onClick={() => checkValidation(user)}>
               Save
             </Button>
-            <Button bgColor="bg-red-500" clickHandler={() => onCancel()}>
+            <Button bgColor="bg-red-500" onClick={() => onCancel()}>
               Cancel
             </Button>
           </div>

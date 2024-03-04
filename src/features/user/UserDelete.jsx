@@ -11,10 +11,10 @@ const UserDelete = ({ user, deleteUser, onCancel }) => {
           Are You sure, You want to delete the user {user.name}?
         </p>
         <div className="flex flex-row gap-5">
-          <Button bgColor="bg-red-500" clickHandler={() => deleteUser(user)}>
+          <Button bgColor="bg-red-500" onClick={() => deleteUser(user)}>
             Confirm
           </Button>
-          <Button bgColor="bg-blue-700" clickHandler={onCancel}>
+          <Button bgColor="bg-blue-700" onClick={onCancel}>
             Cancel
           </Button>
         </div>

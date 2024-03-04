@@ -1,9 +1,12 @@
 /* eslint-disable react/prop-types */
 import Button from "../../shared/UI/Button";
 
-const UserTable = ({ editFunction, deleteFunction, userList }) => {
+const UserTable = ({ onAddEditUser, onDeleteUser, users }) => {
   return (
-    <div className="fixed w-full top-20 mx-auto font-Poppins -z-10 ">
+    <div className="fixed w-[80%]  flex flex-col justify-left items-center top-20 font-Poppins -z-10 ">
+      <Button bgColor="bg-blue-700 " onClick={() => onAddEditUser(null)}>
+        Add User
+      </Button>
       <table className="relative w-[80%] text-left rounded-lg shadow-lg ">
         <thead className="text-base text-gray-700 uppercase bg-gray-200">
           <tr>
@@ -16,10 +19,10 @@ const UserTable = ({ editFunction, deleteFunction, userList }) => {
           </tr>
         </thead>
         <tbody>
-          {userList.map((user) => {
+          {users.map((user, index) => {
             return (
-              <tr key={user.id} className="bg-white border-b ">
-                <td className="px-6 py-4">{user.id}</td>
+              <tr key={index} className="bg-white border-b ">
+                <td className="px-6 py-4">{index + 1}</td>
                 <td className="px-6 py-4">{user.name}</td>
                 <td className="px-6 py-4">{user.age}</td>
                 <td className="px-6 py-4">{user.email}</td>
@@ -27,13 +30,13 @@ const UserTable = ({ editFunction, deleteFunction, userList }) => {
                 <td className="px-6 py-4 flex items-center justify-center">
                   <Button
                     bgColor="bg-blue-700"
-                    clickHandler={() => editFunction(user)}
+                    onClick={() => onAddEditUser(user)}
                   >
                     Edit
                   </Button>
                   <Button
                     bgColor="bg-red-500"
-                    clickHandler={() => deleteFunction(user)}
+                    onClick={() => onDeleteUser(user)}
                   >
                     Delete
                   </Button>

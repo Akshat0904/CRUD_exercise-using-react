@@ -4,16 +4,24 @@ import UserDelete from "./UserDelete";
 import UserTable from "./UserTable";
 import userData from "../../userData";
 
+const initUser = {
+  id: 0,
+  name: "",
+  email: "",
+  age: "",
+  number: "",
+};
+
 const User = () => {
   //Functionality states
   const [users, setUsers] = useState(userData);
   const [showUserForm, setShowUserForm] = useState(false);
-  const [selEditUser, setSelEditUser] = useState(null);
+  const [selEditUser, setSelEditUser] = useState(initUser);
   const [selDeleteUser, setSelDeleteUser] = useState(null);
 
   const onAddEditUser = (user) => {
     setShowUserForm(!showUserForm);
-    setSelEditUser(user);
+    setSelEditUser(user || initUser);
   };
 
   const onCancelUserForm = () => {
@@ -38,16 +46,9 @@ const User = () => {
     const usersArray = [...users];
     console.log(usersArray);
 
-    if (selEditUser) {
+    if (user.id) {
       const index = usersArray.findIndex((obj) => obj.id === user.id);
-      let updatedUser = {
-        ...selEditUser,
-        name: user.name,
-        email: user.email,
-        number: user.number,
-        age: user.age,
-      };
-      usersArray[index] = updatedUser;
+      usersArray[index] = user;
     } else {
       user.id = Math.max(...users.map((obj) => obj.id)) + 1;
       console.log(user.id);
@@ -58,18 +59,18 @@ const User = () => {
     onAddEditUser();
   };
 
-  const isEmailExist = (user) => {
-    if (users.some((e) => e.email === user.email)) {
-      return true;
-    }
-    return;
-  };
+  const getDuplicateDataError = (user) => {
+    let duplicateErr = {};
 
-  const isNumberExist = (user) => {
-    if (users.some((e) => e.number === user.number)) {
-      return true;
+    if (users.some((e) => e.email === user.email && e.id !== user.id)) {
+      duplicateErr.email = "email is already exist, try another one";
     }
-    return;
+
+    if (users.some((e) => e.number === user.number && e.id !== user.id)) {
+      duplicateErr.number = "number is already exist, try another one";
+    }
+
+    return duplicateErr;
   };
 
   return (
@@ -84,8 +85,7 @@ const User = () => {
           onCancel={onCancelUserForm}
           selectedUser={selEditUser}
           saveUser={saveUser}
-          isEmailExist={isEmailExist}
-          isNumberExist={isNumberExist}
+          getDupErr={getDuplicateDataError}
         />
       )}
 

@@ -2,18 +2,13 @@
 import { useState } from "react";
 import Button from "../../shared/UI/Button";
 
-const UserForm = ({
-  onCancel,
-  selectedUser,
-  saveUser,
-  isEmailExist,
-  isNumberExist,
-}) => {
+const UserForm = ({ onCancel, selectedUser, saveUser, getDupErr }) => {
   const [user, setUser] = useState({
-    name: selectedUser ? selectedUser.name : "",
-    age: selectedUser ? selectedUser.age : "",
-    email: selectedUser ? selectedUser.email : "",
-    number: selectedUser ? selectedUser.number : "",
+    id: selectedUser.id,
+    name: selectedUser.name,
+    age: selectedUser.age,
+    email: selectedUser.email,
+    number: selectedUser.number,
   });
 
   const [formErr, setFormErr] = useState({});
@@ -48,20 +43,25 @@ const UserForm = ({
       error.age = "Age must be greater than 18";
     }
 
-    if (!selectedUser || user.email !== selectedUser.email) {
-      if (!isValidEmail(user.email)) {
-        error.email = "email is not valid";
-      } else if (isEmailExist(user)) {
-        error.email = "email is already exist, try another one";
-      }
+    if (!isValidEmail(user.email)) {
+      error.email = "email is not valid";
     }
 
-    if (!selectedUser || user.number !== selectedUser.number) {
-      if (user.number.length !== 10) {
-        error.number = "number must have 10 digits";
-      } else if (isNumberExist(user)) {
-        error.number = "number is already exist, try another one";
-      }
+    if (user.number.length !== 10) {
+      error.number = "number must have 10 digits";
+    }
+
+    if (Object.keys(error).length !== 0) {
+      return error;
+    }
+
+    const dupErr = getDupErr(user);
+
+    if (Object.keys(dupErr).length !== 0) {
+      error = {
+        ...error,
+        ...dupErr,
+      };
     }
 
     return error;
